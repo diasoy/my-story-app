@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MyStoryApp</string>
+
+    <string name="email_digunakan">Email sudah digunakan</string>
+    <string name="email_salah">Format email salah</string>
+    <string name="password_kurang">Tidak boleh kurang dari 8 karakter</string>
+
+    <string name="password_salah">Password salah</string>
+    <string name="email_tidak_ada">Email tidak ada</string>
+
+    <string name="gagal_login">Gagal login</string>
+
+    <string name="nama_kosong">Nama tidak boleh kosong</string>
+    <string name="email_kosong">Email tidak boleh kosong</string>
+    <string name="password_kosong">Password tidak boleh kosong</string>
+    <string name="password_tidak_sama">Password tidak sama</string>
+
+    <string name="login_gagal">Masukkan akun anda dengan benar</string>
+    <string name="berhasil_daftar">Berhasil daftar</string>
+    <string name="berhasil_login">Berhasil login</string>
+    <string name="berhasil_logout">Berhasil logout</string>
+</resources>
