@@ -25,7 +25,6 @@ import com.example.mystoryapp.view.viewmodel.MainViewModel
 import com.example.mystoryapp.view.viewmodel.ViewModelFactory
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val loginViewModel: AuthViewModel by lazy {
@@ -36,7 +35,30 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
+        showLoading(false)
+        setupSpannableString()
+        setupObservers()
+
+        binding.btnLogin.setOnClickListener {
+            binding.etEmail.clearFocus()
+            binding.etPassword.clearFocus()
+
+            if (checkAkun()) {
+                showLoading(true)
+                val requestLogin = LoginDataAccount(
+                    binding.etEmail.text.toString().trim(),
+                    binding.etPassword.text.toString().trim()
+                )
+                loginViewModel.getResponseLogin(requestLogin)
+            } else {
+                showLoginError()
+            }
+        }
+    }
+
+    private fun setupSpannableString() {
         val text = "Belum memiliki akun? Register"
         val spannableString = SpannableString(text)
         val clickableSpan = object : ClickableSpan() {
@@ -57,74 +79,57 @@ class LoginActivity : AppCompatActivity() {
 
         binding.tvAskAkun.text = spannableString
         binding.tvAskAkun.movementMethod = LinkMovementMethod.getInstance()
+    }
 
-        supportActionBar?.hide()
-
+    private fun setupObservers() {
         val preferences = AppPreferences.getInstance(dataStore)
         val mainViewModel = ViewModelProvider(this, ViewModelFactory(preferences))[MainViewModel::class.java]
 
         mainViewModel.getLoginSession().observe(this) { sessionTrue ->
             if (sessionTrue) {
-                val intent = Intent(this, StoryActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                navigateToStoryActivity()
             }
         }
 
-        binding.btnLogin.setOnClickListener {
-            binding.etEmail.clearFocus()
-            binding.etPassword.clearFocus()
+        loginViewModel.isLoadingLogin.observe(this) { showLoading(it) }
+        loginViewModel.messageLogin.observe(this) { response ->
+            response?.let { checkLogin(mainViewModel) }
+        }
+    }
 
-            if (isDataValid()) {
-                val requestLogin = LoginDataAccount(
-                    binding.etEmail.text.toString().trim(),
-                    binding.etPassword.text.toString().trim()
-                )
-                loginViewModel.getResponseLogin(requestLogin)
-            } else {
-                if (!binding.etEmail.isEmailValid) binding.etEmail.error =
-                    getString(R.string.email_tidak_ada)
-                if (!binding.etPassword.isPasswordValid) binding.etPassword.error =
-                    getString(R.string.password_salah)
-
-                Toast.makeText(this, R.string.gagal_login, Toast.LENGTH_SHORT).show()
+    private fun checkLogin(userLoginViewModel: MainViewModel) {
+        loginViewModel.isErrorLogin.observe(this) { isError ->
+            loginViewModel.messageLogin.observe(this) { message ->
+                if (!isError) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    val user = loginViewModel.userLogin.value
+                    userLoginViewModel.saveLoginSession(true)
+                    userLoginViewModel.saveToken(user?.loginResult!!.token)
+                    userLoginViewModel.saveName(user.loginResult.name)
+                } else {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
-
-        loginViewModel.messageLogin.observe(this) { message ->
-            responseLogin(
-                loginViewModel.isErrorLogin,
-                message,
-                mainViewModel
-            )
-        }
-
-        loginViewModel.isLoadingLogin.observe(this) {
-            showLoading(it)
-        }
     }
 
-    private fun responseLogin(
-        isError: Boolean,
-        message: String,
-        userLoginViewModel: MainViewModel
-    ) {
-        if (!isError) {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            val user = loginViewModel.userLogin.value
-            userLoginViewModel.saveLoginSession(true)
-            userLoginViewModel.saveToken(user?.loginResult!!.token)
-            userLoginViewModel.saveName(user.loginResult.name)
-        } else {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun isDataValid(): Boolean {
+    private fun checkAkun(): Boolean {
         return binding.etEmail.isEmailValid && binding.etPassword.isPasswordValid
+    }
+
+    private fun showLoginError() {
+        if (!binding.etEmail.isEmailValid) binding.etEmail.error = getString(R.string.email_tidak_ada)
+        if (!binding.etPassword.isPasswordValid) binding.etPassword.error = getString(R.string.password_salah)
+        Toast.makeText(this, R.string.gagal_login, Toast.LENGTH_SHORT).show()
     }
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun navigateToStoryActivity() {
+        val intent = Intent(this, StoryActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 }

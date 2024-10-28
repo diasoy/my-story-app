@@ -7,32 +7,35 @@ import com.example.mystoryapp.data.model.ResponseLogin
 import com.example.mystoryapp.data.model.ResponseStory
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 
 interface ApiService {
     @POST("register")
-     fun register(@Body requestRegister: RegisterDataAccount): Call<ResponseDetail>
+    suspend fun register(@Body requestRegister: RegisterDataAccount): ResponseDetail
 
     @POST("login")
-     fun login(@Body requestLogin: LoginDataAccount): Call<ResponseLogin>
+    suspend fun login(@Body requestLogin: LoginDataAccount): ResponseLogin
 
     @GET("stories")
-     fun fetchAllStories(
+    suspend fun fetchAllStories(): ResponseStory
+
+    @GET("stories/{id}")
+    suspend fun fetchDetailStory(
         @Header("Authorization") token: String,
-    ): Call<ResponseStory>
+        @Path("id") storyId: String
+     ): ResponseDetail
 
     @Multipart
     @POST("stories")
      fun uploadStory(
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
-        @Header("Authorization") token: String
-    ): Call<ResponseDetail>
+    ): ResponseDetail
 }
