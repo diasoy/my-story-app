@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyStoryApp</string>
+    <string name="app_name">Story App</string>
 
     <string name="email_digunakan">Email sudah digunakan</string>
     <string name="email_salah">Format email salah</string>
@@ -19,4 +19,6 @@
     <string name="berhasil_daftar">Berhasil daftar</string>
     <string name="berhasil_login">Berhasil login</string>
     <string name="berhasil_logout">Berhasil logout</string>
+
+    <string name="buat_story">Buat Story</string>
 </resources>

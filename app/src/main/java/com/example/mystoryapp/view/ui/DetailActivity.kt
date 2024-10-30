@@ -1,21 +1,30 @@
+// DetailActivity.kt
 package com.example.mystoryapp.view.ui
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.mystoryapp.R
+import com.bumptech.glide.Glide
+import com.example.mystoryapp.data.model.StoryDetail
+import com.example.mystoryapp.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_detail)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val story = intent.getParcelableExtra<StoryDetail>(EXTRA_STORY)
+        if (story != null) {
+            binding.apply {
+                binding.storyTitle.text = story.name
+                binding.storyDescription.text = story.description
+                Glide.with(this@DetailActivity)
+                    .load(story.photoUrl)
+                    .into(binding.storyImage)
+
+            }
         }
     }
 

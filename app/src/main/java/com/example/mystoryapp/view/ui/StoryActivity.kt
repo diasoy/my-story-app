@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.mystoryapp.R
 import com.example.mystoryapp.data.adapter.StoryAdapter
 import com.example.mystoryapp.databinding.ActivityStoryBinding
@@ -26,29 +25,49 @@ class StoryActivity : AppCompatActivity() {
     private lateinit var storyViewModel: StoryViewModel
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var userToken: String
-    private val pref = AppPreferences.getInstance(dataStore)
+    private lateinit var pref: AppPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_story)
+        binding = ActivityStoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        supportActionBar?.title = getString(R.string.app_name)
 
-        userToken = runBlocking { AppPreferences.getInstance(dataStore).getToken().first() }
-
+        pref = AppPreferences.getInstance(applicationContext.dataStore)
+        userToken = runBlocking { pref.getToken().first() }
         storyViewModel = ViewModelProvider(this)[StoryViewModel::class.java]
-        storyAdapter = StoryAdapter()
+        storyAdapter = StoryAdapter { story ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_STORY, story)
+            startActivity(intent)
+        }
 
-        val rvStory: RecyclerView = findViewById(R.id.rv_stories)
-        rvStory.layoutManager = LinearLayoutManager(this)
-        rvStory.adapter = storyAdapter
+        binding.rvStories.apply {
+            layoutManager = LinearLayoutManager(this@StoryActivity)
+            adapter = storyAdapter
+        }
+
+        binding.pullRefresh.setOnRefreshListener {
+            refreshStoryList()
+        }
 
         storyViewModel.stories.observe(this) { stories ->
             storyAdapter.setData(stories)
+            binding.pullRefresh.isRefreshing = false
+
         }
 
         storyViewModel.errorMessage.observe(this) { errorMessage ->
             if (errorMessage.isNotEmpty()) {
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
             }
+            binding.pullRefresh.isRefreshing = false
+
+        }
+
+        binding.btnFloating.setOnClickListener {
+            val intent = Intent(this, AddStoryActivity::class.java)
+            startActivity(intent)
         }
 
         storyViewModel.getStories(userToken)
@@ -69,29 +88,30 @@ class StoryActivity : AppCompatActivity() {
                 logoutUser()
                 true
             }
-
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+            else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun refreshStoryList() {
+        binding.pullRefresh.isRefreshing = true
+        storyViewModel.getStories(userToken)
     }
 
     private fun logoutUser(){
         val dialog = AlertDialog.Builder(this)
         val mainViewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
         dialog.setTitle("Logout")
-        dialog.setMessage("Are you sure want to logout?")
-        dialog.setPositiveButton("Yes") { _, _ ->
+        dialog.setMessage("Apakah anda yakin ingin keluar dari akun?")
+        dialog.setPositiveButton("Ya") { _, _ ->
             mainViewModel.clearDataLogin()
-            Toast.makeText(this, "Logout Success", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Logout Sukses", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
-        dialog.setNegativeButton("No") { dialog, _ ->
+        dialog.setNegativeButton("Tidak") { dialog, _ ->
             dialog.dismiss()
         }
         dialog.show()
     }
-
 }
