@@ -4,85 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/bg_splash"
     tools:context=".view.ui.AddStoryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="30dp">
+        android:paddingBottom="30dp"
+        android:paddingHorizontal="24dp"
+        >
 
         <Button
             android:id="@+id/btnPostStory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Buat Story"
-            app:layout_constraintEnd_toEndOf="@+id/tv_des"
-            app:layout_constraintStart_toStartOf="@+id/tv_des"
-            app:layout_constraintTop_toBottomOf="@+id/tv_des" />
-
-        <TextView
-            android:id="@+id/tvUsers"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@string/buat_story"
+            style="@style/button"
+            app:layout_constraintEnd_toEndOf="@+id/etDeskripsi"
+            app:layout_constraintStart_toStartOf="@+id/etDeskripsi"
+            app:layout_constraintTop_toBottomOf="@+id/etDeskripsi" />
 
         <ImageView
-            android:id="@+id/imageStoryUpload"
+            android:id="@+id/imgUpload"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:adjustViewBounds="true"
-            android:alpha="0"
-            android:contentDescription="Deskripsi"
-            app:layout_constraintEnd_toEndOf="@+id/tvUsers"
-            app:layout_constraintStart_toStartOf="@+id/tvUsers"
-            app:layout_constraintTop_toBottomOf="@+id/tvUsers"
+            android:alpha="1"
+            android:contentDescription="@string/deskripsi"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/galeri_none" />
 
         <Button
-            android:id="@+id/cameraButton"
+            android:id="@+id/btnCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Buka Kamera"
-            app:layout_constraintEnd_toStartOf="@+id/galleryButton"
+            android:text="@string/buka_kamera"
+            style="@style/button"
+            app:layout_constraintEnd_toStartOf="@+id/btnGaleri"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/imageStoryUpload"
-            app:layout_constraintTop_toBottomOf="@+id/imageStoryUpload" />
+            app:layout_constraintStart_toStartOf="@+id/imgUpload"
+            app:layout_constraintTop_toBottomOf="@+id/imgUpload" />
 
         <Button
-            android:id="@+id/galleryButton"
+            android:id="@+id/btnGaleri"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Buka Galeri"
-            app:layout_constraintEnd_toEndOf="@+id/imageStoryUpload"
+            android:text="@string/buka_galeri"
+            style="@style/button"
+            app:layout_constraintEnd_toEndOf="@+id/imgUpload"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/cameraButton"
-            app:layout_constraintTop_toBottomOf="@+id/imageStoryUpload" />
+            app:layout_constraintStart_toEndOf="@+id/btnCamera"
+            app:layout_constraintTop_toBottomOf="@+id/imgUpload" />
 
         <EditText
-            android:id="@+id/tv_des"
+            android:id="@+id/etDeskripsi"
             android:layout_width="0dp"
             android:layout_height="160dp"
             android:layout_marginTop="32dp"
             android:autofillHints="Description"
             android:gravity="top|left"
-            android:hint="Masukkan Deskripsi"
+            android:hint="@string/masukkan_deskripsi"
             android:inputType="textMultiLine"
             android:maxHeight="180dp"
             android:maxLines="8"
             android:padding="15dp"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/imageStoryUpload"
-            app:layout_constraintStart_toStartOf="@+id/imageStoryUpload"
-            app:layout_constraintTop_toBottomOf="@+id/cameraButton"
+            android:background="@drawable/stroke"
+            app:layout_constraintEnd_toEndOf="@+id/imgUpload"
+            app:layout_constraintStart_toStartOf="@+id/imgUpload"
+            app:layout_constraintTop_toBottomOf="@+id/btnCamera"
             tools:ignore="RtlHardcoded" />
 
         <ProgressBar
@@ -91,10 +86,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imageStoryUpload"
-            app:layout_constraintEnd_toEndOf="@+id/imageStoryUpload"
-            app:layout_constraintStart_toStartOf="@+id/imageStoryUpload"
-            app:layout_constraintTop_toBottomOf="@+id/tvUsers" />
+            app:layout_constraintBottom_toBottomOf="@+id/imgUpload"
+            app:layout_constraintEnd_toEndOf="@+id/imgUpload"
+            app:layout_constraintStart_toStartOf="@+id/imgUpload"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

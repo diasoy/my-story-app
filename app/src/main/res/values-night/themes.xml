@@ -1,5 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MyStoryApp" parent="Theme.Material3.DayNight">
+    <style name="Base.Theme.MyStoryApp.Dark" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/primaryDark</item>
+        <item name="colorPrimaryDark">@color/primaryDarkDark</item>
+        <item name="colorSecondary">@color/secondaryDark</item>
+        <item name="colorAccent">@color/accentDark</item>
+        <item name="android:windowBackground">@color/backgroundDark</item>
+        <item name="android:textColorPrimary">@color/textPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/textSecondaryDark</item>
+        <item name="android:textColor">@color/textPrimaryDark</item>
+    </style>
+
+    <style name="bg_splash">
+        <item name="android:background">@color/primaryDark</item>
+    </style>
+    <style name="button">
+        <item name="android:backgroundTint">@color/primaryLight</item>
+        <item name="android:textColor">@color/textPrimaryLight</item>
+    </style>
+    <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp.Light">
     </style>
 </resources>

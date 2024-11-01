@@ -20,6 +20,7 @@ import com.example.mystoryapp.view.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
+@Suppress("NAME_SHADOWING")
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
     private lateinit var storyViewModel: StoryViewModel

@@ -1,9 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="register_text_color">#FFFFFF</color> <!-- Red color for Register text -->
-    <color name="background_light">#375685</color> <!-- Blue background -->
-    <color name="text_light">#FFFFFFFF</color> <!-- White text -->
-    <color name="background_dark">#121212</color> <!-- Dark gray background -->
-    <color name="text_dark">#FFFFFFFF</color> <!-- White text -->
-    <color name="btn_primary">#4D6D9C</color> <!-- Red color for button -->
+    <color name="primaryLight">#005BAC</color>
+    <color name="primaryDarkLight">#003A70</color>
+    <color name="secondaryLight">#007BE8</color>
+    <color name="accentLight">#FF4081</color>
+    <color name="backgroundLight">#FFFFFF</color>
+    <color name="textPrimaryLight">#212121</color>
+    <color name="textSecondaryLight">#757575</color>
+
+    <color name="primaryDark">#272727</color>
+    <color name="primaryDarkDark">#1C1C1C</color>
+    <color name="secondaryDark">#424242</color>
+    <color name="accentDark">#FF4081</color>
+    <color name="backgroundDark">#121212</color>
+    <color name="textPrimaryDark">#FFFFFF</color>
+    <color name="textSecondaryDark">#B0BEC5</color>
 </resources>

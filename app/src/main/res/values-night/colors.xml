@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="register_text_color">#FFFFFF</color> <!-- Red color for Register text -->
-    <color name="background_light">#375685</color> <!-- Blue background -->
-    <color name="text_light">#FFFFFFFF</color> <!-- White text -->
-    <color name="background_dark">#121212</color> <!-- Dark gray background -->
-    <color name="text_dark">#FFFFFFFF</color> <!-- White text -->
-    <color name="btn_primary">#5E5E5E</color> <!-- Red color for button -->
-</resources>

@@ -17,16 +17,20 @@ class AddStoryViewModel(private val pref: AppPreferences) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isUploaded = MutableLiveData<Boolean>()
+    val isUploaded: LiveData<Boolean> = _isUploaded
+
     fun uploadStory(photo: MultipartBody.Part, des: RequestBody, token: String) {
         _isLoading.value = true
         viewModelScope.launch {
             try {
                 val response = ApiConfig.getApiService(token).uploadStory(photo, des)
                 _isLoading.value = false
-                _message.value = response.message
                 _message.value = "Story berhasil di upload!"
+                _isUploaded.value = true
             } catch (e: Exception) {
                 _message.value = e.message
+                _isUploaded.value = false
             } finally {
                 _isLoading.value = false
             }

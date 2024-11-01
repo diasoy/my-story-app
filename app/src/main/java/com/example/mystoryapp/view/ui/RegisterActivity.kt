@@ -1,5 +1,7 @@
 package com.example.mystoryapp.view.ui
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -14,6 +16,7 @@ import com.example.mystoryapp.data.model.RegisterDataAccount
 import com.example.mystoryapp.databinding.ActivityRegisterBinding
 import com.example.mystoryapp.view.viewmodel.AuthViewModel
 
+@Suppress("DEPRECATION")
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private val authViewModel: AuthViewModel by lazy {
@@ -26,7 +29,9 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        showLoading(false)
         setupObservers()
+        setupAnimation()
 
         binding.cbPassword.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -47,6 +52,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             if (isRegisterFormValid()) {
+                showLoading(true)
                 val dataRegisterAccount = RegisterDataAccount(
                     name = binding.etName.text.toString().trim(),
                     email = binding.etEmail.text.toString().trim(),
@@ -59,6 +65,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("This method has been deprecated in favor of using the\n      {@link OnBackPressedDispatcher} via {@link #getOnBackPressedDispatcher()}.\n      The OnBackPressedDispatcher controls how back button events are dispatched\n      to one or more {@link OnBackPressedCallback} objects.")
     override fun onBackPressed() {
         super.onBackPressed()
         navigateToLogin()
@@ -115,5 +122,32 @@ class RegisterActivity : AppCompatActivity() {
     private fun navigateToLogin() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+    }
+
+    private fun setupAnimation() {
+        ObjectAnimator.ofFloat(binding.logoApp, View.TRANSLATION_X, -40f, 40f).apply {
+            duration = 5000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val messageAnimator = ObjectAnimator.ofFloat(binding.tvWelcome, View.ALPHA, 1f).setDuration(500)
+        val nameAnimator = ObjectAnimator.ofFloat(binding.etName, View.ALPHA, 1f).setDuration(500)
+        val emailAnimator = ObjectAnimator.ofFloat(binding.etEmail, View.ALPHA, 1f).setDuration(500)
+        val passwordAnimator = ObjectAnimator.ofFloat(binding.etPassword, View.ALPHA, 1f).setDuration(500)
+        val passwordConAnimator = ObjectAnimator.ofFloat(binding.etConfirmPassword, View.ALPHA, 1f).setDuration(500)
+        val loginButtonAnimator = ObjectAnimator.ofFloat(binding.buttonRegister, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(
+                messageAnimator,
+                nameAnimator,
+                emailAnimator,
+                passwordAnimator,
+                passwordConAnimator,
+                loginButtonAnimator
+            )
+            start()
+        }
     }
 }

@@ -1,24 +1,42 @@
 <resources>
     <string name="app_name">Story App</string>
-
-    <string name="email_digunakan">Email sudah digunakan</string>
-    <string name="email_salah">Format email salah</string>
-    <string name="password_kurang">Tidak boleh kurang dari 8 karakter</string>
-
-    <string name="password_salah">Password salah</string>
-    <string name="email_tidak_ada">Email tidak ada</string>
-
-    <string name="gagal_login">Gagal login</string>
-
-    <string name="nama_kosong">Nama tidak boleh kosong</string>
-    <string name="email_kosong">Email tidak boleh kosong</string>
-    <string name="password_kosong">Password tidak boleh kosong</string>
-    <string name="password_tidak_sama">Password tidak sama</string>
-
-    <string name="login_gagal">Masukkan akun anda dengan benar</string>
-    <string name="berhasil_daftar">Berhasil daftar</string>
-    <string name="berhasil_login">Berhasil login</string>
-    <string name="berhasil_logout">Berhasil logout</string>
-
-    <string name="buat_story">Buat Story</string>
+    <string name="email_digunakan">Email already used</string>
+    <string name="email_salah">Invalid email format</string>
+    <string name="password_kurang">Must be at least 8 characters</string>
+    <string name="password_salah">Incorrect password</string>
+    <string name="email_tidak_ada">Email not found</string>
+    <string name="gagal_login">Login failed</string>
+    <string name="nama_kosong">Name cannot be empty</string>
+    <string name="email_kosong">Email cannot be empty</string>
+    <string name="password_kosong">Password cannot be empty</string>
+    <string name="password_tidak_sama">Passwords do not match</string>
+    <string name="login_gagal">Please enter your account details correctly</string>
+    <string name="berhasil_daftar">Registration successful</string>
+    <string name="berhasil_login">Login successful</string>
+    <string name="berhasil_logout">Logout successful</string>
+    <string name="buat_story">Create Story</string>
+    <string name="gambar_poster">Poster Image</string>
+    <string name="tambah_story">Add Story</string>
+    <string name="text_selamat_datang">Welcome to the Story App! Register first to start a story!</string>
+    <string name="nama">Name</string>
+    <string name="nama_anda">Your Name</string>
+    <string name="email">Email</string>
+    <string name="example_email">example@mail.com</string>
+    <string name="password">Password</string>
+    <string name="hint_password">***</string>
+    <string name="konfirmasi_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="lihat_password">Show Password</string>
+    <string name="logo_app">app logo</string>
+    <string name="login">Login</string>
+    <string name="register_akun">Don\'t have an account? Register</string>
+    <string name="story_image_detail">Story Image Detail</string>
+    <string name="deskripsi">Description</string>
+    <string name="buka_kamera">Open Camera</string>
+    <string name="buka_galeri">Open Gallery</string>
+    <string name="masukkan_deskripsi">Enter Description</string>
+    <string name="menu">Menu</string>
+    <string name="ganti_bahasa">Change Language</string>
+    <string name="keluar_akun">Logout</string>
+    <string name="belum_akun">Don\'t have an account? Register</string>
 </resources>

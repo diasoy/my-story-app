@@ -1,11 +1,15 @@
 package com.example.mystoryapp.view.ui
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.method.HideReturnsTransformationMethod
 import android.text.method.LinkMovementMethod
+import android.text.method.PasswordTransformationMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
@@ -40,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         showLoading(false)
         setupSpannableString()
         setupObservers()
+        setupAnimation()
 
         binding.btnLogin.setOnClickListener {
             binding.etEmail.clearFocus()
@@ -56,10 +61,18 @@ class LoginActivity : AppCompatActivity() {
                 showLoginError()
             }
         }
+
+        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            } else {
+                binding.etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+            }
+        }
     }
 
     private fun setupSpannableString() {
-        val text = "Belum memiliki akun? Register"
+        val text = getString(R.string.belum_akun)
         val spannableString = SpannableString(text)
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
@@ -71,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
         val endIndex = startIndex + "Register".length
         spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         spannableString.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(this, R.color.register_text_color)),
+            ForegroundColorSpan(ContextCompat.getColor(this, R.color.textSecondaryDark)),
             startIndex,
             endIndex,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -131,5 +144,28 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, StoryActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun setupAnimation() {
+        ObjectAnimator.ofFloat(binding.logoApp, View.TRANSLATION_X, -40f, 40f).apply {
+            duration = 5000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val messageAnimator = ObjectAnimator.ofFloat(binding.tvWelcome, View.ALPHA, 1f).setDuration(500)
+        val emailAnimator = ObjectAnimator.ofFloat(binding.etEmail, View.ALPHA, 1f).setDuration(500)
+        val passwordAnimator = ObjectAnimator.ofFloat(binding.etPassword, View.ALPHA, 1f).setDuration(500)
+        val loginButtonAnimator = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(
+                messageAnimator,
+                emailAnimator,
+                passwordAnimator,
+                loginButtonAnimator
+            )
+            start()
+        }
     }
 }
