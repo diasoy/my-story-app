@@ -39,4 +39,5 @@
     <string name="ganti_bahasa">Ganti Bahasa</string>
     <string name="keluar_akun">Keluar Akun</string>
     <string name="belum_akun">Belum memiliki akun? Register</string>
+    <string name="map">Maps</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -66,6 +67,10 @@ class StoryActivity : AppCompatActivity() {
 
         }
 
+        storyViewModel.isLoading.observe(this) { isLoading ->
+            showLoading(isLoading)
+        }
+
         binding.btnFloating.setOnClickListener {
             val intent = Intent(this, AddStoryActivity::class.java)
             startActivity(intent)
@@ -87,6 +92,10 @@ class StoryActivity : AppCompatActivity() {
             }
             R.id.action_logout -> {
                 logoutUser()
+                true
+            }
+            R.id.action_map -> {
+                startActivity(Intent(this, MapsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -114,5 +123,9 @@ class StoryActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

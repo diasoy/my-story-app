@@ -4,6 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_map"
+        android:title="@string/map"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/more"
         android:icon="@drawable/baseline_more_vert_24"
@@ -23,4 +30,5 @@
                 android:textColor="@color/textPrimaryLight" />
         </menu>
     </item>
+
 </menu>

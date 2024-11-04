@@ -39,4 +39,6 @@
     <string name="ganti_bahasa">Change Language</string>
     <string name="keluar_akun">Logout</string>
     <string name="belum_akun">Don\'t have an account? Register</string>
+    <string name="map">Maps</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

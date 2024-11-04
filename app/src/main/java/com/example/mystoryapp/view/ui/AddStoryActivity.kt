@@ -37,7 +37,6 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var addStoryViewModel: AddStoryViewModel
     private lateinit var userToken: String
-
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
