@@ -1,11 +1,15 @@
 package com.example.mystoryapp.data.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@Entity(tableName = "stories")
 data class StoryDetail(
+    @PrimaryKey
     @field:SerializedName("id")
     val id: String,
 

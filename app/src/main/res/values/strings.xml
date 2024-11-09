@@ -40,5 +40,11 @@
     <string name="keluar_akun">Logout</string>
     <string name="belum_akun">Don\'t have an account? Register</string>
     <string name="map">Maps</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_maps">Maps Activity</string>
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satellite</string>
+    <string name="terrain_type">Terrain</string>
+    <string name="hybrid_type">Hybrid</string>
+    <string name="coba_lagi">Try Again</string>
+    <string name="message">Message  :</string>
 </resources>

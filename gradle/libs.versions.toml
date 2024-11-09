@@ -13,11 +13,14 @@ activity = "1.9.3"
 constraintlayout = "2.1.4"
 datastoreCoreAndroid = "1.1.1"
 roomCompiler = "2.6.1"
+roomCompilerVersion = "2.5.0"
 roomKtx = "2.6.1"
+roomKtxVersion = "2.5.0"
 roomRuntime = "2.6.1"
 retrofit = "2.9.0"
 loggingInterceptor = "4.11.0"
 glide = "4.16.0"
+roomRuntimeVersion = "2.5.0"
 swiperefreshlayout = "1.1.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 playServicesMaps = "19.0.0"
@@ -33,6 +36,10 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastoreCoreAndroid" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
+androidx-room-ktx-v250 = { module = "androidx.room:room-ktx", version.ref = "roomKtxVersion" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomKtxVersion" }
+androidx-room-runtime-v250 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

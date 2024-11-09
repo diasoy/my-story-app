@@ -40,4 +40,11 @@
     <string name="keluar_akun">Keluar Akun</string>
     <string name="belum_akun">Belum memiliki akun? Register</string>
     <string name="map">Maps</string>
+    <string name="title_activity_maps">Maps Activity</string>
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satellite</string>
+    <string name="terrain_type">Terrain</string>
+    <string name="hybrid_type">Hybrid</string>
+    <string name="coba_lagi">Coba Lagi</string>
+    <string name="message">Pesan  :</string>
 </resources>

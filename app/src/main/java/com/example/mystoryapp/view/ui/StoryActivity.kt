@@ -10,15 +10,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mystoryapp.R
+import com.example.mystoryapp.data.adapter.LoadingStateAdapter
 import com.example.mystoryapp.data.adapter.StoryAdapter
+import com.example.mystoryapp.data.database.StoryDatabase
+import com.example.mystoryapp.data.retrofit.ApiConfig
 import com.example.mystoryapp.databinding.ActivityStoryBinding
 import com.example.mystoryapp.helper.AppPreferences
+import com.example.mystoryapp.helper.StoryRepository
 import com.example.mystoryapp.view.viewmodel.MainViewModel
 import com.example.mystoryapp.view.viewmodel.StoryViewModel
+import com.example.mystoryapp.view.viewmodel.StoryViewModelFactory
 import com.example.mystoryapp.view.viewmodel.ViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @Suppress("NAME_SHADOWING")
@@ -37,7 +45,7 @@ class StoryActivity : AppCompatActivity() {
 
         pref = AppPreferences.getInstance(applicationContext.dataStore)
         userToken = runBlocking { pref.getToken().first() }
-        storyViewModel = ViewModelProvider(this)[StoryViewModel::class.java]
+
         storyAdapter = StoryAdapter { story ->
             val intent = Intent(this, DetailActivity::class.java)
             intent.putExtra(DetailActivity.EXTRA_STORY, story)
@@ -46,38 +54,39 @@ class StoryActivity : AppCompatActivity() {
 
         binding.rvStories.apply {
             layoutManager = LinearLayoutManager(this@StoryActivity)
-            adapter = storyAdapter
+            adapter = storyAdapter.withLoadStateFooter(
+                footer = LoadingStateAdapter { storyAdapter.retry() }
+            )
         }
+
+        observeStories()
 
         binding.pullRefresh.setOnRefreshListener {
             refreshStoryList()
-        }
-
-        storyViewModel.stories.observe(this) { stories ->
-            storyAdapter.setData(stories)
-            binding.pullRefresh.isRefreshing = false
-
-        }
-
-        storyViewModel.errorMessage.observe(this) { errorMessage ->
-            if (errorMessage.isNotEmpty()) {
-                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-            }
-            binding.pullRefresh.isRefreshing = false
-
-        }
-
-        storyViewModel.isLoading.observe(this) { isLoading ->
-            showLoading(isLoading)
         }
 
         binding.btnFloating.setOnClickListener {
             val intent = Intent(this, AddStoryActivity::class.java)
             startActivity(intent)
         }
-
-        storyViewModel.getStories(userToken)
     }
+
+    private fun observeStories() {
+        val database = StoryDatabase.getDatabase(this)
+        val apiService = ApiConfig.getApiService(userToken)
+        val repository = StoryRepository(database, apiService)
+
+        storyViewModel = ViewModelProvider(this, StoryViewModelFactory(repository))[StoryViewModel::class.java]
+
+        lifecycleScope.launch {
+            showLoading(true)
+            storyViewModel.getStories(userToken).collectLatest { pagingData ->
+                storyAdapter.submitData(pagingData)
+                showLoading(false)
+            }
+        }
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -103,9 +112,16 @@ class StoryActivity : AppCompatActivity() {
     }
 
     private fun refreshStoryList() {
-        binding.pullRefresh.isRefreshing = true
-        storyViewModel.getStories(userToken)
+        showLoading(true)
+        lifecycleScope.launch {
+            storyViewModel.getStories(userToken).collectLatest { pagingData ->
+                storyAdapter.submitData(pagingData)
+                showLoading(false)
+                binding.pullRefresh.isRefreshing = false
+            }
+        }
     }
+
 
     private fun logoutUser(){
         val dialog = AlertDialog.Builder(this)
