@@ -14,8 +14,10 @@ import com.example.mystoryapp.data.retrofit.ApiService
 @OptIn(ExperimentalPagingApi::class)
 class StoryRemoteMediator(
     private val database: StoryDatabase,
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    token: String
 ) : RemoteMediator<Int, StoryDetail>() {
+    var token: String? = token
 
     private companion object {
         const val INITIAL_PAGE_INDEX = 1

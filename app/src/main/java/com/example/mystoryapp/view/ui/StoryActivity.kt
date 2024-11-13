@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mystoryapp.R
 import com.example.mystoryapp.data.adapter.LoadingStateAdapter
@@ -24,12 +23,9 @@ import com.example.mystoryapp.view.viewmodel.MainViewModel
 import com.example.mystoryapp.view.viewmodel.StoryViewModel
 import com.example.mystoryapp.view.viewmodel.StoryViewModelFactory
 import com.example.mystoryapp.view.viewmodel.ViewModelFactory
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-@Suppress("NAME_SHADOWING")
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
     private lateinit var storyViewModel: StoryViewModel
@@ -78,15 +74,11 @@ class StoryActivity : AppCompatActivity() {
 
         storyViewModel = ViewModelProvider(this, StoryViewModelFactory(repository))[StoryViewModel::class.java]
 
-        lifecycleScope.launch {
-            showLoading(true)
-            storyViewModel.getStories(userToken).collectLatest { pagingData ->
-                storyAdapter.submitData(pagingData)
-                showLoading(false)
-            }
+        storyViewModel.getStories(userToken).observe(this) { pagingData ->
+            storyAdapter.submitData(lifecycle, pagingData)
+            showLoading(false)
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -113,15 +105,12 @@ class StoryActivity : AppCompatActivity() {
 
     private fun refreshStoryList() {
         showLoading(true)
-        lifecycleScope.launch {
-            storyViewModel.getStories(userToken).collectLatest { pagingData ->
-                storyAdapter.submitData(pagingData)
-                showLoading(false)
-                binding.pullRefresh.isRefreshing = false
-            }
+        storyViewModel.getStories(userToken).observe(this) { pagingData ->
+            storyAdapter.submitData(lifecycle, pagingData)
+            showLoading(false)
+            binding.pullRefresh.isRefreshing = false
         }
     }
-
 
     private fun logoutUser(){
         val dialog = AlertDialog.Builder(this)

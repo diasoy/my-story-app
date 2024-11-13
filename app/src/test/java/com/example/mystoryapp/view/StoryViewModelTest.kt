@@ -2,6 +2,7 @@ package com.example.mystoryapp.view
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
@@ -11,10 +12,11 @@ import com.example.mystoryapp.DataDummy
 import com.example.mystoryapp.MainDispatcherRule
 import com.example.mystoryapp.data.adapter.StoryAdapter
 import com.example.mystoryapp.data.model.StoryDetail
+import com.example.mystoryapp.getOrAwaitValue
 import com.example.mystoryapp.helper.StoryRepository
+import com.example.mystoryapp.view.viewmodel.StoryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Rule
@@ -26,7 +28,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class StoryViewModelTest {
+class MainViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
@@ -36,23 +38,25 @@ class StoryViewModelTest {
     @Mock
     private lateinit var storyRepository: StoryRepository
 
+    private lateinit var storyViewModel: StoryViewModel
+
     @Test
     fun `when Get Stories Should Not Null and Return Data`() = runTest {
         val dummyStories = DataDummy.generateDummyStories()
         val data: PagingData<StoryDetail> = StoryPagingSource.snapshot(dummyStories)
-        val expectedStories = flowOf(data)
+        val expectedStories = MutableLiveData<PagingData<StoryDetail>>()
+        expectedStories.value = data
         Mockito.`when`(storyRepository.getStories("token")).thenReturn(expectedStories)
 
-        val actualStories = storyRepository.getStories("token")
+        storyViewModel = StoryViewModel(storyRepository)
+        val actualStories: PagingData<StoryDetail> = storyViewModel.getStories("token").getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
-        actualStories.collect { pagingData ->
-            differ.submitData(pagingData)
-        }
+        differ.submitData(actualStories)
 
         Assert.assertNotNull(differ.snapshot())
         Assert.assertEquals(dummyStories.size, differ.snapshot().size)
@@ -61,20 +65,20 @@ class StoryViewModelTest {
 
     @Test
     fun `when Get Stories Empty Should Return No Data`() = runTest {
-        val data = PagingData.empty<StoryDetail>()
-        val expectedStories = flowOf(data)
+        val data: PagingData<StoryDetail> = PagingData.from(emptyList())
+        val expectedStories = MutableLiveData<PagingData<StoryDetail>>()
+        expectedStories.value = data
         Mockito.`when`(storyRepository.getStories("token")).thenReturn(expectedStories)
 
-        val actualStories = storyRepository.getStories("token")
+        storyViewModel = StoryViewModel(storyRepository)
+        val actualStories: PagingData<StoryDetail> = storyViewModel.getStories("token").getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
-        actualStories.collect { pagingData ->
-            differ.submitData(pagingData)
-        }
+        differ.submitData(actualStories)
 
         Assert.assertEquals(0, differ.snapshot().size)
     }
